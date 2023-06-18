@@ -53,9 +53,11 @@ h1 {
     border-radius: 10px;
 }
 
-.play {
+form {
     font-size: 1.5rem;
     width: 30vw;
+    display: flex;
+    gap: 10px;
 }
 
 .footer {
