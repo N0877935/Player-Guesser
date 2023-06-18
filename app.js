@@ -1,32 +1,52 @@
-var https = require('follow-redirects').https;
-var fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const https = require('https');
+const wiki = require('wikijs').default;
 
-var options = {
-  'method': 'GET',
-  'hostname': 'v3.football.api-sports.io',
-  'path': '/teams?league=39&season=2021',
-  'headers': {
-    'x-rapidapi-key': 'a6cad2bfc27abf2bbc35170221a7c9e7',
-    'x-rapidapi-host': 'v3.football.api-sports.io'
-  },
-  'maxRedirects': 20
-};
+const app = express();
 
-var req = https.request(options, function (res) {
-  var chunks = [];
+const port = 3000;
 
-  res.on("data", function (chunk) {
-    chunks.push(chunk);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  
+  res.sendFile(__dirname + '/index.html');
+
+
+  const url = "https://soccer.sportmonks.com/api/v2.0/players/96611?api_token=bn0t5U326A3ITj1QxP1ZHYyHeELIEEu91Q8Tjfhq3C7GvDFe4eMMATztxH40#"
+
+  https.get(url, (response) => {
+    const data = [];
+    response.on('data', (d) => {
+      data.push(d);      
+     }).on('end', () => {
+      const buffer = Buffer.concat(data);
+      const obj = JSON.parse(buffer.toString());
+      const randomPlayer = obj.data.display_name;
+   
+      const player = wiki().page(randomPlayer);
+
+      player.then(page => page.info()).then(console.log);
+     })
   });
 
-  res.on("end", function (chunk) {
-    var body = Buffer.concat(chunks);
-    console.log(body.toString());
-  });
+})
 
-  res.on("error", function (error) {
-    console.error(error);
-  });
-});
+app.post('/', (req, res) => {
+  res.status(204).send()
 
-req.end();
+})
+
+
+app.listen(port, () => {
+  console.log(`App is listening on port ${port}`);
+})
+
+
+// const player = wiki().page();
+
+// player.then(page => page.info()).then(console.log);
+
+// https://soccer.sportmonks.com/api/v2.0/players/172104?api_token=bn0t5U326A3ITj1QxP1ZHYyHeELIEEu91Q8Tjfhq3C7GvDFe4eMMATztxH40#
