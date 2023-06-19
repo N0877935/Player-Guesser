@@ -15,18 +15,16 @@
              </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="col"><%= yearsOne %></th>
-                    <th scope="col"><%= teamOne %></th>
-                    <th scope="col"><%= appsOne %></th>
-                    <th scope="col"><%= goalsOne %></th>
-                </tr>
+                <th scope="col"><%= yearsOne %></th>
+                <th scope="col"><%= teamOne %></th>
+                <th scope="col"><%= appsOne %></th>
+                <th scope="col"><%= goalsOne %></th>
             </tbody>
         </table>
 
     </div>
-    <form action="post">
-        <input type="text" class="form-control">
+    <form action="/" id="playerInput" method="POST">
+        <input type="text" class="form-control" name="inputPlayer">
         <button  type="submit" class="btn btn-success guess">Guess</button>
     </form>
 </div>

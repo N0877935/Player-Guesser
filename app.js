@@ -13,13 +13,14 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+const randId = Math.floor(Math.random() * 100);
 const round = [];
 
 app.get("/", (req, res) => {
   const day = date.getDate();
 
   const key = "bn0t5U326A3ITj1QxP1ZHYyHeELIEEu91Q8Tjfhq3C7GvDFe4eMMATztxH40#";
-  const url = `https://soccer.sportmonks.com/api/v2.0/players/96611?api_token=${key}`;
+  const url = `https://soccer.sportmonks.com/api/v2.0/players/${randId}?api_token=${key}`;
 
   https.get(url, (response) => {
     const data = [];
