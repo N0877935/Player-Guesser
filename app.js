@@ -13,7 +13,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const firstInfo = [];
+const round = [];
 
 app.get("/", (req, res) => {
   const day = date.getDate();
@@ -33,9 +33,15 @@ app.get("/", (req, res) => {
         const randomPlayer = obj.data.display_name;
         wiki()
           .page(randomPlayer)
-          .then((page) => page.info("years1"))
+          .then((page) => page.info())
           .then((response) => {
-            res.render("home", { yearsOne: response, todayDate: day });
+            res.render("home", {
+              yearsOne: response.years1,
+              teamOne: response.clubs1,
+              appsOne: response.caps1,
+              goalsOne: response.goals1,
+              todayDate: day,
+            });
           });
       });
   });
@@ -48,5 +54,3 @@ app.post("/", (req, res) => {
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
 });
-
-
