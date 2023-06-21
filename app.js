@@ -5,7 +5,6 @@ const { log } = require("console");
 const wiki = require("wikijs").default;
 const date = require(__dirname + "/date.js");
 
-
 const app = express();
 
 const port = 3000;
@@ -18,7 +17,21 @@ app.use(express.static("public"));
 const randId = Math.floor(Math.random() * 100);
 let playerData;
 
-const playerDates = [];
+// const playerDates = [];
+
+const playerObj = {
+  playerDates: [],
+  playerTeams: [],
+  playerApps: [],
+  playerGoals: [],
+};
+
+const regex = {
+  years: /^years[1-5]$/,
+  teams: /^clubs[1-5]$/,
+  apps: /^caps[1-5]$/,
+  goals: /^goals[1-5]$/,
+};
 
 app.get("/", (req, res) => {
   const day = date.getDate();
@@ -36,7 +49,7 @@ app.get("/", (req, res) => {
         const buffer = Buffer.concat(data);
         const obj = JSON.parse(buffer.toString());
         const randomPlayer = obj.data.display_name;
-        
+
         wiki()
           .page(randomPlayer)
           .then((page) => page.info())
@@ -49,19 +62,11 @@ app.get("/", (req, res) => {
               goalsOne: response.goals1,
               todayDate: day,
             });
-        
-            
-    
-            Object.keys(response).filter((key) => key.match(/^years[1-5]$/)).forEach((key) => {
-              if(playerDates.includes(response[key])) {
-                console.log('Entry already exists!');
-              } else {
-                playerDates.push(response[key]);
-              }
-          });
 
-          console.log(playerDates);
-
+            test(response, playerObj.playerDates, regex.years);
+            test(response, playerObj.playerTeams, regex.teams);
+            test(response, playerObj.playerApps, regex.apps);
+            test(response, playerObj.playerGoals, regex.goals);
           });
       });
   });
@@ -71,11 +76,10 @@ app.post("/", (req, res) => {
   console.log(playerData);
   const playerName = req.body.inputPlayer;
   if (playerName === playerData) {
-    console.log('Success');
-
+    console.log("Success");
   } else {
-    console.log('Incorrect');
-    res.redirect('/');
+    console.log("Incorrect");
+    res.redirect("/");
   }
 });
 
@@ -83,4 +87,15 @@ app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
 });
 
-//ybx8n5v2f77um9pxq5xet2b5
+function test(obj, array, regex) {
+  Object.keys(obj)
+    .filter((key) => key.match(regex))
+    .forEach((key) => {
+      if (array.includes(obj[key])) {
+        console.log("Entry already exists!");
+      } else {
+        array.push(obj[key]);
+        console.log("Entry pushed to array");
+      }
+    });
+}
