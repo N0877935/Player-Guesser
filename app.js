@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const https = require("https");
+const { log } = require("console");
 const wiki = require("wikijs").default;
 const date = require(__dirname + "/date.js");
+
 
 const app = express();
 
@@ -14,7 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const randId = Math.floor(Math.random() * 100);
-const round = [];
+let playerData;
+
+const playerDates = [];
 
 app.get("/", (req, res) => {
   const day = date.getDate();
@@ -32,10 +36,12 @@ app.get("/", (req, res) => {
         const buffer = Buffer.concat(data);
         const obj = JSON.parse(buffer.toString());
         const randomPlayer = obj.data.display_name;
+        
         wiki()
           .page(randomPlayer)
           .then((page) => page.info())
           .then((response) => {
+            playerData = randomPlayer;
             res.render("home", {
               yearsOne: response.years1,
               teamOne: response.clubs1,
@@ -43,15 +49,38 @@ app.get("/", (req, res) => {
               goalsOne: response.goals1,
               todayDate: day,
             });
+        
+            
+    
+            Object.keys(response).filter((key) => key.match(/^years[1-5]$/)).forEach((key) => {
+              if(playerDates.includes(response[key])) {
+                console.log('Entry already exists!');
+              } else {
+                playerDates.push(response[key]);
+              }
+          });
+
+          console.log(playerDates);
+
           });
       });
   });
 });
 
 app.post("/", (req, res) => {
-  res.status(204).send();
+  console.log(playerData);
+  const playerName = req.body.inputPlayer;
+  if (playerName === playerData) {
+    console.log('Success');
+
+  } else {
+    console.log('Incorrect');
+    res.redirect('/');
+  }
 });
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
 });
+
+//ybx8n5v2f77um9pxq5xet2b5
