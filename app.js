@@ -5,6 +5,7 @@ const https = require("https");
 const { log } = require("console");
 const wiki = require("wikijs").default;
 const date = require(__dirname + "/date.js");
+const favicon = require('express-favicon');
 
 const app = express();
 
@@ -14,10 +15,11 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(favicon(__dirname + '/public/assets/football.png'))
 
 const randId = Math.floor(Math.random() * 100);
 
-let guesses = 0;
+
 
 const playerObj = {
   playerName: String,
@@ -25,7 +27,8 @@ const playerObj = {
   playerTeams: [],
   playerApps: [],
   playerGoals: [],
-  playerGuesses: 0
+  noOfGuesses: 0,
+  playerGuesses: []
 };
 
 const regex = {
@@ -58,15 +61,9 @@ app.get("/", (req, res) => {
           .then((response) => {
             playerObj.playerName = randomPlayer;
             res.render("home", {
-              // yearsOne: response.years1,
-              // teamOne: response.clubs1,
-              // appsOne: response.caps1,
-              // goalsOne: response.goals1,
-              // todayDate: day,
               playerObj,
               todayDate: day
             });
-
             test(response, playerObj.playerDates, regex.years);
             test(response, playerObj.playerTeams, regex.teams);
             test(response, playerObj.playerApps, regex.apps);
@@ -79,6 +76,7 @@ app.get("/", (req, res) => {
 
 });
 
+// ADD START BUTTON TO FIX REFRESH PROBLEM
 
 app.post("/", (req, res) => {
   
@@ -91,8 +89,10 @@ app.post("/", (req, res) => {
   } else {
     console.log("Incorrect");
     res.redirect("/");
-    playerObj.playerGuesses++
-    console.log(playerObj.playerGuesses);
+    playerObj.noOfGuesses++
+    console.log(playerObj.noOfGuesses);
+    playerObj.playerGuesses.push(req.body.inputPlayer);
+
   }
 });
 

@@ -16,7 +16,7 @@
             </thead>
             <tbody>
             <tr>
-                <% if (playerObj.playerGuesses >= 0) { %>
+                <% if (playerObj.noOfGuesses >= 0) { %>
                 <th scope="col"><%= playerObj.playerDates[0] %></th>
                 <th scope="col"><%= playerObj.playerTeams[0] %></th>
                 <th scope="col"><%= playerObj.playerApps[0] %></th>
@@ -24,7 +24,7 @@
                 <% } %>
             </tr>
             <tr>
-                <% if (playerObj.playerGuesses >= 1) { %>
+                <% if (playerObj.noOfGuesses >= 1) { %>
                     <th scope="col"><%= playerObj.playerDates[1] %></th>
                     <th scope="col"><%= playerObj.playerTeams[1] %></th>
                     <th scope="col"><%= playerObj.playerApps[1] %></th>
@@ -32,7 +32,7 @@
                     <% } %>
             </tr>
             <tr>
-                <% if (playerObj.playerGuesses >= 2) { %>
+                <% if (playerObj.noOfGuesses >= 2) { %>
                     <th scope="col"><%= playerObj.playerDates[2] %></th>
                     <th scope="col"><%= playerObj.playerTeams[2] %></th>
                     <th scope="col"><%= playerObj.playerApps[2] %></th>
@@ -40,7 +40,7 @@
                     <% } %>
             </tr>
             <tr>
-                <% if (playerObj.playerGuesses >= 3) { %>
+                <% if (playerObj.noOfGuesses >= 3) { %>
                     <th scope="col"><%= playerObj.playerDates[3] %></th>
                     <th scope="col"><%= playerObj.playerTeams[3] %></th>
                     <th scope="col"><%= playerObj.playerApps[3] %></th>
@@ -48,7 +48,7 @@
                     <% } %>
             </tr>
             <tr>
-                <% if (playerObj.playerGuesses >= 4) { %>
+                <% if (playerObj.noOfGuesses >= 4) { %>
                     <th scope="col"><%= playerObj.playerDates[4] %></th>
                     <th scope="col"><%= playerObj.playerTeams[4] %></th>
                     <th scope="col"><%= playerObj.playerApps[4] %></th>
@@ -63,16 +63,12 @@
         <input type="text" class="form-control" name="inputPlayer">
         <button  type="submit" class="btn btn-success guess">Guess</button>
     </form>
-    <div class="image-container">
-        <div class="league">
-            <img src="" alt="">
-        </div>
-        <div class="team">
-            <img src="" alt="">
-        </div>
-        <div class="player">
-            <img src="" alt="">
-        </div>
+    <div class="guesses-container">
+        <h2>Guesses</h2>
+        <br>
+        <% playerObj.playerGuesses.forEach((ele) => { %>
+        <p class="player-guesses"><%= ele %></p>
+        <% }) %>
     </div>
 </div>
 
