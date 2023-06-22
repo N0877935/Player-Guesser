@@ -60,14 +60,14 @@ app.get("/", (req, res) => {
           .then((page) => page.info())
           .then((response) => {
             playerObj.playerName = randomPlayer;
-            res.render("home", {
-              playerObj,
-              todayDate: day
-            });
             test(response, playerObj.playerDates, regex.years);
             test(response, playerObj.playerTeams, regex.teams);
             test(response, playerObj.playerApps, regex.apps);
             test(response, playerObj.playerGoals, regex.goals);
+            res.render("home", {
+              playerObj,
+              todayDate: day
+            });
             console.log(playerObj);
           });
       });
@@ -79,7 +79,6 @@ app.get("/", (req, res) => {
 // ADD START BUTTON TO FIX REFRESH PROBLEM
 
 app.post("/", (req, res) => {
-  
 
   console.log(playerObj.playerName);
 

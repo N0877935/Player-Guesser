@@ -60,6 +60,20 @@ form {
     gap: 10px;
 }
 
+.start {
+    height: 5vw;
+    width: 8vw;
+    font-size: 2rem;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+}
+
+
 .guesses-container {
     display: flex;
     height: 18vh;
