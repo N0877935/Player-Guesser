@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const https = require("https");
@@ -15,15 +16,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const randId = Math.floor(Math.random() * 100);
-let playerData;
 
-// const playerDates = [];
+let guesses = 0;
 
 const playerObj = {
+  playerName: String,
   playerDates: [],
   playerTeams: [],
   playerApps: [],
   playerGoals: [],
+  playerGuesses: 0
 };
 
 const regex = {
@@ -36,7 +38,7 @@ const regex = {
 app.get("/", (req, res) => {
   const day = date.getDate();
 
-  const key = "bn0t5U326A3ITj1QxP1ZHYyHeELIEEu91Q8Tjfhq3C7GvDFe4eMMATztxH40#";
+  const key = process.env.API_KEY;
   const url = `https://soccer.sportmonks.com/api/v2.0/players/${randId}?api_token=${key}`;
 
   https.get(url, (response) => {
@@ -54,32 +56,43 @@ app.get("/", (req, res) => {
           .page(randomPlayer)
           .then((page) => page.info())
           .then((response) => {
-            playerData = randomPlayer;
+            playerObj.playerName = randomPlayer;
             res.render("home", {
-              yearsOne: response.years1,
-              teamOne: response.clubs1,
-              appsOne: response.caps1,
-              goalsOne: response.goals1,
-              todayDate: day,
+              // yearsOne: response.years1,
+              // teamOne: response.clubs1,
+              // appsOne: response.caps1,
+              // goalsOne: response.goals1,
+              // todayDate: day,
+              playerObj,
+              todayDate: day
             });
 
             test(response, playerObj.playerDates, regex.years);
             test(response, playerObj.playerTeams, regex.teams);
             test(response, playerObj.playerApps, regex.apps);
             test(response, playerObj.playerGoals, regex.goals);
+            console.log(playerObj);
           });
       });
   });
+
+
 });
 
+
 app.post("/", (req, res) => {
-  console.log(playerData);
+  
+
+  console.log(playerObj.playerName);
+
   const playerName = req.body.inputPlayer;
-  if (playerName === playerData) {
+  if (playerName === playerObj.playerName) {
     console.log("Success");
   } else {
     console.log("Incorrect");
     res.redirect("/");
+    playerObj.playerGuesses++
+    console.log(playerObj.playerGuesses);
   }
 });
 

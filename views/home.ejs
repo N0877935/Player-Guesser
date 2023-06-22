@@ -15,13 +15,47 @@
              </tr>
             </thead>
             <tbody>
-                <th scope="col"><%= yearsOne %></th>
-                <th scope="col"><%= teamOne %></th>
-                <th scope="col"><%= appsOne %></th>
-                <th scope="col"><%= goalsOne %></th>
+            <tr>
+                <% if (playerObj.playerGuesses >= 0) { %>
+                <th scope="col"><%= playerObj.playerDates[0] %></th>
+                <th scope="col"><%= playerObj.playerTeams[0] %></th>
+                <th scope="col"><%= playerObj.playerApps[0] %></th>
+                <th scope="col"><%= playerObj.playerGoals[0] %></th>
+                <% } %>
+            </tr>
+            <tr>
+                <% if (playerObj.playerGuesses >= 1) { %>
+                    <th scope="col"><%= playerObj.playerDates[1] %></th>
+                    <th scope="col"><%= playerObj.playerTeams[1] %></th>
+                    <th scope="col"><%= playerObj.playerApps[1] %></th>
+                    <th scope="col"><%= playerObj.playerGoals[1] %></th>
+                    <% } %>
+            </tr>
+            <tr>
+                <% if (playerObj.playerGuesses >= 2) { %>
+                    <th scope="col"><%= playerObj.playerDates[2] %></th>
+                    <th scope="col"><%= playerObj.playerTeams[2] %></th>
+                    <th scope="col"><%= playerObj.playerApps[2] %></th>
+                    <th scope="col"><%= playerObj.playerGoals[2] %></th>
+                    <% } %>
+            </tr>
+            <tr>
+                <% if (playerObj.playerGuesses >= 3) { %>
+                    <th scope="col"><%= playerObj.playerDates[3] %></th>
+                    <th scope="col"><%= playerObj.playerTeams[3] %></th>
+                    <th scope="col"><%= playerObj.playerApps[3] %></th>
+                    <th scope="col"><%= playerObj.playerGoals[3] %></th>
+                    <% } %>
+            </tr>
+            <tr>
+                <% if (playerObj.playerGuesses >= 4) { %>
+                    <th scope="col"><%= playerObj.playerDates[4] %></th>
+                    <th scope="col"><%= playerObj.playerTeams[4] %></th>
+                    <th scope="col"><%= playerObj.playerApps[4] %></th>
+                    <th scope="col"><%= playerObj.playerGoals[4] %></th>
+                    <% } %>
+            </tr>
             </tbody>
-
-
         </table>
 
     </div>
