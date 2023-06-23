@@ -7,7 +7,7 @@ body {
 }
 
 .header {
-    height: 20vh;
+    height: 10vh;
     display: flex;
     justify-content: space-between;
     padding: 15px;
@@ -32,14 +32,51 @@ h1 {
 
 }
 
-
 .container {
-    height: 75vh;
+    height: 85vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
+
+.answer-container {
+    display: flex;
+    height: 10vh;
+    width: 80vw;
+    justify-content: space-between;
+}
+
+.incorrect, .correct {
+    height: 10vh;
+    width: 30vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.correct {
+
+    display: none;
+}
+
+.incorrect {
+    display: none;
+}
+
+.correct-show {
+    border: 2px solid greenyellow;
+    color: greenyellow;
+    border-radius: 10px;
+}
+
+.incorrect-show {
+    border: 2px solid red;
+    color: red;
+    border-radius: 10px;
+}
+
+
 
 .player-details {
     display: flex;
@@ -60,47 +97,35 @@ form {
     gap: 10px;
 }
 
-.start {
-    height: 5vw;
-    width: 8vw;
-    font-size: 2rem;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    -webkit-transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-    -moz-transform: translate(-50%,-50%);
-}
 
 
 .guesses-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 70px;
     height: 18vh;
-    width: 35vw;
+    width: 60vw;
     background-color: #f5f5f5;
     border: 2px solid #e3e1e1;
     border-radius: 10px;
     justify-content: center;
-    gap: 10px;
+    gap: 5px;
+    
 }
 
-.guesses-container h2 {
-    position: absolute;
-}
 
 .player-guesses {
     color: red;
     font-size: 1.5rem;
     font-weight: 600;
-    margin-top: 50px;
     border: 2px solid #f78383;
     border-radius: 10px;
-    height: 3vw;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
+    height: 5vh;
+    width: 30vw;
 }
 
 .footer {

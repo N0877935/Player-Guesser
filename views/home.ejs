@@ -2,6 +2,18 @@
 
 
 <div class="container">
+    <div class="answer-container">
+        <% if(playerObj.playerBoolean = true) { %>
+            <div class="correct">
+                <h2>Correct</h1>
+            </div>
+        <% } %>
+        <% if(playerObj.playerBoolean = true) { %>
+        <div class="incorrect">
+            <h2>Incorrect</h2>
+        </div>
+        <% } %>
+    </div>  
     <h2><%= todayDate %></h2>
     <div class="player-details">
         <h2>Player Career* #</h1>
@@ -62,9 +74,8 @@
         <input type="text" class="form-control" name="inputPlayer">
         <button  type="submit" class="btn btn-success guess">Guess</button>
     </form>
+    <h2>Guesses</h2>
     <div class="guesses-container">
-        <h2>Guesses</h2>
-        <br>
         <% playerObj.playerGuesses.forEach((ele) => { %>
         <p class="player-guesses"><%= ele %></p>
         <% }) %>

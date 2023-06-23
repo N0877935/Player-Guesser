@@ -28,7 +28,8 @@ const playerObj = {
   playerApps: [],
   playerGoals: [],
   noOfGuesses: 0,
-  playerGuesses: []
+  playerGuesses: [],
+  playerBoolean: Boolean
 };
 
 const regex = {
@@ -72,11 +73,7 @@ app.get("/", (req, res) => {
           });
       });
   });
-
-
 });
-
-// ADD START BUTTON TO FIX REFRESH PROBLEM
 
 app.post("/", (req, res) => {
 
@@ -85,13 +82,17 @@ app.post("/", (req, res) => {
   const playerName = req.body.inputPlayer;
   if (playerName === playerObj.playerName) {
     console.log("Success");
+    playerObj.playerBoolean = true;
+    console.log(playerObj.playerBoolean);
   } else {
     console.log("Incorrect");
-    res.redirect("/");
+
     playerObj.noOfGuesses++
     console.log(playerObj.noOfGuesses);
     playerObj.playerGuesses.push(req.body.inputPlayer);
-
+    playerObj.playerBoolean = false;
+    console.log(playerObj.playerBoolean);
+    res.redirect("/");
   }
 });
 
