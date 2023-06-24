@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const https = require("https");
@@ -8,18 +8,14 @@ const date = require(__dirname + "/date.js");
 const favicon = require('express-favicon');
 
 const app = express();
-
 const port = 3000;
 
 app.set("view engine", "ejs");
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(favicon(__dirname + '/public/assets/football.png'))
+app.use(favicon(__dirname + '/public/assets/football.png'));
 
 const randId = Math.floor(Math.random() * 100);
-
-
 
 const playerObj = {
   playerName: String,
@@ -36,47 +32,38 @@ const regex = {
   years: /^years[1-5]$/,
   teams: /^clubs[1-5]$/,
   apps: /^caps[1-5]$/,
-  goals: /^goals[1-5]$/,
+  goals: /^goals[1-5]$/
 };
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   const day = date.getDate();
-
   const key = process.env.API_KEY;
   const url = `https://soccer.sportmonks.com/api/v2.0/players/${randId}?api_token=${key}`;
 
-  https.get(url, (response) => {
-    const data = [];
-    response
-      .on("data", (d) => {
-        data.push(d);
-      })
-      .on("end", () => {
-        const buffer = Buffer.concat(data);
-        const obj = JSON.parse(buffer.toString());
-        const randomPlayer = obj.data.display_name;
+  try {
+    const response = await getData(url);
+    const randomPlayer = response.data.display_name;
+    const page = await wiki().page(randomPlayer);
+    const pageInfo = await page.info();
 
-        wiki()
-          .page(randomPlayer)
-          .then((page) => page.info())
-          .then((response) => {
-            playerObj.playerName = randomPlayer;
-            test(response, playerObj.playerDates, regex.years);
-            test(response, playerObj.playerTeams, regex.teams);
-            test(response, playerObj.playerApps, regex.apps);
-            test(response, playerObj.playerGoals, regex.goals);
-            res.render("home", {
-              playerObj,
-              todayDate: day
-            });
-            console.log(playerObj);
-          });
-      });
-  });
+    playerObj.playerName = randomPlayer;
+    populateObj(pageInfo, playerObj.playerDates, regex.years);
+    populateObj(pageInfo, playerObj.playerTeams, regex.teams);
+    populateObj(pageInfo, playerObj.playerApps, regex.apps);
+    populateObj(pageInfo, playerObj.playerGoals, regex.goals);
+
+    res.render("home", {
+      playerObj,
+      todayDate: day
+    });
+    console.log(playerObj);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.post("/", (req, res) => {
-
   console.log(playerObj.playerName);
 
   const playerName = req.body.inputPlayer;
@@ -87,20 +74,20 @@ app.post("/", (req, res) => {
   } else {
     console.log("Incorrect");
 
-    playerObj.noOfGuesses++
+    playerObj.noOfGuesses++;
     console.log(playerObj.noOfGuesses);
     playerObj.playerGuesses.push(req.body.inputPlayer);
     playerObj.playerBoolean = false;
     console.log(playerObj.playerBoolean);
-    res.redirect("/");
   }
+  res.redirect("/");
 });
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
 });
 
-function test(obj, array, regex) {
+function populateObj(obj, array, regex) {
   Object.keys(obj)
     .filter((key) => key.match(regex))
     .forEach((key) => {
@@ -112,3 +99,20 @@ function test(obj, array, regex) {
       }
     });
 }
+
+function getData(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      let data = "";
+      response
+        .on("data", (chunk) => {
+          data += chunk;
+        })
+        .on("end", () => {
+          const obj = JSON.parse(data);
+          resolve(obj);
+        })
+        .on("error", (error) => {
+          reject(error);
+        })
+      })})}
